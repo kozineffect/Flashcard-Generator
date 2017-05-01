@@ -1,0 +1,25 @@
+{
+  "name": "flashcard-generator",
+  "version": "1.0.0",
+  "description": "Basic flashcard creator",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kozineffect/Flashcard-Generator.git"
+  },
+  "keywords": [
+    "flashcards"
+  ],
+  "author": "Joe Kozlowski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kozineffect/Flashcard-Generator/issues"
+  },
+  "homepage": "https://github.com/kozineffect/Flashcard-Generator#readme",
+  "dependencies": {
+    "inquirer": "^3.0.6"
+  }
+}
