@@ -1,70 +1,78 @@
 var BasicCard = require("./BasicCard.js");
 var ClozeCard = require("./ClozeCard.js");
 var inquirer = require('inquirer');
-var basic_card = [];
-var cloze_card = [];
-var new_card;
-var choose_card;
-var quit = 'N';
-var create_quiz;
+var fs = require("fs");
+var basic_card = []; // Array to store the basic card objects
+var cloze_card = []; // Array to store the cloze card objects
+var new_card; // Stores user input during the new card creation process
+var choose_card; // Variable to store what type of card user wishes to create
+var quit; //Variable to store if the user wants to quit the program
 
+// Initial iteration of user prompts for creating cards
+getCard();
+
+// Function created to let user to either proceed or quit program.
 function getCard() {
-    if(quit !== 'Y' || quit !== 'y')
-    {
+
     inquirer.prompt([{
         name: "quit",
         message: "Do you wish to quit? Y for yes, N for no",
-    }])
-    inquirer.prompt([{
-        name: "create_quiz",
-        message: "Enter a 1 to create cards or a 2 to review cards:",
     }]).then(function (answers) {
-        create_card();
+        if (answers.quit !== 'Y' && answers.quit !== 'y') { // Allows the card creation function to be called if user wants to create cards.
+            create_card();
+        }
     });
-    }
-    
 }
 
-function create_card(){
+// Function for creating new Basic or Cloze Flashcards
+function create_card() {
     inquirer.prompt([{
-                name: "choose_card",
-                message: "Which card do you wish to create? Press 1 for Basic, 2 for Cloze:",
-            }]).then(function (answers) {
-                choose_card = answers.choose_card;
-                choose_card = parseInt(choose_card);
-                if (choose_card === 1) {
-                    inquirer.prompt([{
-                            name: "front",
-                            message: "What do you want the front of the card to say?"
-                        },
-                        {
-                            name: "back",
-                            message: "What do you want the back of the card to say?"
-                        }
-                    ]).then(function (answers) {
-                        new_card = new BasicCard(answers.front, answers.back);
-                        basic_card.push(new_card);
-                        console.log(basic_card[0]);
-                    });
+        name: "choose_card",
+        message: "Which card do you wish to create? Press 1 for Basic, 2 for Cloze:",
+    }]).then(function (answers) {
+        choose_card = answers.choose_card;
+        choose_card = parseInt(choose_card);
+        if (choose_card === 1) { //If user wants to create a Basic Flashcard
+            inquirer.prompt([{
+                    name: "front",
+                    message: "What do you want the front of the card to say?"
+                },
+                {
+                    name: "back",
+                    message: "What do you want the back of the card to say?"
                 }
-                if (choose_card === 2) {
-                    inquirer.prompt([{
-                            name: "text",
-                            message: "What is the full text of the card?"
-                        },
-                        {
-                            name: "cloze",
-                            message: "What text do you want deleted from the full text?"
-                        }
-                    ]).then(function (answers) {
-                        new_card = new ClozeCard(answers.text, answers.cloze);
-                        cloze_card.push(new_card);
-                        console.log(cloze_card[0]);
-                    });
+            ]).then(function (answers) { // Takes user input for front and back text and creates a Basic Flashcard object
+                new_card = new BasicCard(answers.front, answers.back);
+                basic_card.push(new_card);
+                console.log("This is what you have so far in Basic Cards:");
+                console.log("--------------------------------------------");
+                for (var i = 0; i < basic_card.length; i++) { // Iterates through all Basic Flashcards made and shows them to the user
+                    console.log(basic_card[i]);
+                    console.log("--------------------------------------------");
                 }
+                getCard(); // Recalls the function to give the user the option to quit or continue
             });
-            getCard();
+        }
+        if (choose_card === 2) { // Executes if the user picks a Cloze Flashcard creation
+            inquirer.prompt([{
+                    name: "text",
+                    message: "What is the full text of the card?"
+                },
+                {
+                    name: "cloze",
+                    message: "What text do you want deleted from the full text?"
+                }
+            ]).then(function (answers) { // Takes user input for Cloze Flashcard and creates it
+                new_card = new ClozeCard(answers.text, answers.cloze);
+                cloze_card.push(new_card);
+                console.log("This is what you have so far in Cloze Cards:");
+                console.log("--------------------------------------------");
+                for (var y = 0; y < cloze_card.length; y++) { // Iterated through all made Cloze Flashcards and shows them to the user
+                    console.log(cloze_card[y]);
+                    console.log("--------------------------------------------");
+                }
+                getCard(); // Calls the function that allows the user to quit or to continue.
+            });
+        }
+    });
 }
-
-
-getCard();
